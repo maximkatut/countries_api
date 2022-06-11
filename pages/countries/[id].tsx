@@ -1,24 +1,23 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import { getAllCountryIds, getCoutry } from "../../lib/countries";
+import { getAllCountryIds, getCountry } from "../../lib/countries";
+import Layout from "../../components/layout";
 
-const Coutry = ({ countryData }: any) => {
+const Country = ({ countryData }: any) => {
   return (
-    <div className="">
+    <Layout>
       <Head>
         <title>Countries - {countryData.name.common}</title>
         <meta name="description" content="Countries API" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <header className=""></header>
       <main className="">
         {countryData.name.common} <br />
         <Image src={countryData.flags.png} width={100} height={60} alt="Flag" />
       </main>
       <Link href={"/"}>Go back</Link>
-      <footer className=""></footer>
-    </div>
+    </Layout>
   );
 };
 
@@ -31,7 +30,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: any) {
-  const countryData = await getCoutry(params.id);
+  const countryData = await getCountry(params.id);
   return {
     props: {
       countryData,
@@ -39,4 +38,4 @@ export async function getStaticProps({ params }: any) {
   };
 }
 
-export default Coutry;
+export default Country;
