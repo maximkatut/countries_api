@@ -22,20 +22,20 @@ export const getAllCountries = async () => {
 export const getAllCountryIds = async () => {
   let paths;
   await clientApi
-    .get(COUNTRIES_ROUTES.ALL)
+    .get(COUNTRIES_ROUTES.CCA3)
     .then((res) => res.data)
     .then((data) => {
       paths = data.map((country: any) => {
-        return { params: { id: country.cca2.toLowerCase() } };
+        return { params: { id: country.cca3.toLowerCase() } };
       });
     });
   return paths;
 };
 
-export const getCountry = async (cca2: string) => {
+export const getCountry = async (cca3: string) => {
   let country;
   await clientApi
-    .get(`${COUNTRIES_ROUTES.ALPHA}/${cca2}`)
+    .get(`${COUNTRIES_ROUTES.ALPHA}/${cca3}`)
     .then((res) => res.data)
     .then((data) => {
       country = data[0];
