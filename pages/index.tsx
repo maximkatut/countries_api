@@ -1,21 +1,30 @@
-import type { NextPage } from "next";
 import Head from "next/head";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { ToastContainer } from "react-toastify";
+import type { NextPage } from "next";
+
 import "react-toastify/dist/ReactToastify.css";
+
+import { useStore } from "../store";
 import { getAllCountries } from "../lib/countries";
+import Layout from "../components/layout";
+import SearchForm from "../components/searchForm";
+
 // TODO add infinite scroll
 
 const Home: NextPage = () => {
-  const [countries, setCountries] = useState([]);
+  const countries = useStore((state) => state.countries);
+  const setCountries = useStore((state) => state.setCountries);
 
   useEffect(() => {
-    getAllCountries().then((data) => setCountries(data));
-  }, []);
+    getAllCountries().then((data) => {
+      setCountries(data);
+    });
+  });
 
   return (
-    <div className="">
+    <Layout>
       <Head>
         <title>Countries</title>
         <meta name="description" content="Countries API" />
@@ -49,10 +58,10 @@ const Home: NextPage = () => {
         draggable={false}
         pauseOnHover={false}
       />
-      <header className=""></header>
       <main className="">
+        <SearchForm />
         {countries &&
-          countries.map((country, index) => {
+          countries.slice(0, 10).map((country, index) => {
             return (
               <span key={index} className="m-4">
                 <Link href={`countries/${country.cca2.toLowerCase()}`}>
@@ -62,9 +71,7 @@ const Home: NextPage = () => {
             );
           })}
       </main>
-
-      <footer className=""></footer>
-    </div>
+    </Layout>
   );
 };
 

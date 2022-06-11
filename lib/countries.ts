@@ -32,7 +32,7 @@ export const getAllCountryIds = async () => {
   return paths;
 };
 
-export const getCoutry = async (cca2: string) => {
+export const getCountry = async (cca2: string) => {
   let country;
   await clientApi
     .get(`${COUNTRIES_ROUTES.ALPHA}/${cca2}`)
