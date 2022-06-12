@@ -1,9 +1,15 @@
 import React from "react";
 import Header from "./header";
-const Layout = ({ children }: { children: React.ReactNode }) => {
+const Layout = ({
+  children,
+  home = false,
+}: {
+  children: React.ReactNode;
+  home?: boolean;
+}) => {
   return (
-    <div className="bg-light-grey min-h-screen dark:bg-very-dark-blue text-text dark:text-white px-20">
-      <Header />
+    <div className="transition bg-light-grey min-h-screen dark:bg-very-dark-blue text-text dark:text-white px-20">
+      <Header home={home} />
       {children}
     </div>
   );
