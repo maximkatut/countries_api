@@ -4,3 +4,11 @@ export const COUNTRIES_ROUTES = {
   ALPHA: "/alpha",
   CCA3: "/all?fields=cca3",
 };
+export const COUNTRIES_REGIONS = [
+  "Asia",
+  "Americas",
+  "Africa",
+  "Oceania",
+  "Europe",
+  "Antarctic",
+];

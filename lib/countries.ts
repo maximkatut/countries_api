@@ -4,6 +4,20 @@ import {
   COUNTRIES_ROUTES,
 } from "../utils/constants/countries.constants";
 
+export type IData = {
+  name: { common: string };
+  cca3: string;
+  capital: string[];
+  flags: { svg: string };
+  population: number;
+  region: string;
+  subregion: string;
+  tld: string[];
+  currencies: object;
+  languages: object;
+  borders: string[];
+};
+
 const clientApi = axios.create({
   baseURL: BASE_URL,
 });
@@ -16,7 +30,7 @@ export const getAllCountries = async () => {
     .then((data) => {
       countries = data;
     });
-  return countries;
+  return countries as unknown | IData[];
 };
 
 export const getAllCountryIds = async () => {
@@ -40,5 +54,5 @@ export const getCountry = async (cca3: string) => {
     .then((data) => {
       country = data[0];
     });
-  return country;
+  return country as unknown | IData;
 };

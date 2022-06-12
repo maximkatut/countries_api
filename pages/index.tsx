@@ -1,16 +1,17 @@
 import Head from "next/head";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
 import type { NextPage } from "next";
 
 import "react-toastify/dist/ReactToastify.css";
 
 import { useStore } from "../store";
-import { getAllCountries } from "../lib/countries";
+import { getAllCountries, IData } from "../lib/countries";
 import Layout from "../components/layout";
 import SearchForm from "../components/searchForm";
 import Card from "../components/card";
 import { LocalStorage } from "../services/LocalStorage/LocalStorage.service";
+import DropDown from "../components/dropDown";
 
 // TODO add infinite scroll
 
@@ -18,17 +19,18 @@ const Home: NextPage = () => {
   const countries = useStore((state) => state.countries);
   const setCountries = useStore((state) => state.setCountries);
   const setIsDark = useStore((state) => state.setIsDark);
+  const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
     setIsDark(LocalStorage.get("theme") === "dark");
     LocalStorage.update();
     getAllCountries().then((data) => {
-      setCountries(data);
+      setCountries(data as IData[]);
     });
   }, [setCountries, setIsDark]);
 
   return (
-    <Layout>
+    <Layout home>
       <Head>
         <title>Countries</title>
         <meta name="description" content="Countries API" />
@@ -65,12 +67,18 @@ const Home: NextPage = () => {
       <main className="pb-20">
         <div className="flex justify-between mb-12">
           <SearchForm />
+          <DropDown setFilter={setFilter} filter={filter} />
         </div>
         <ul className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-20">
           {countries &&
-            countries.slice(0, 10).map((country, index) => {
-              return <Card key={index} country={country} />;
-            })}
+            countries
+              .filter((item) =>
+                filter === "all" ? item : item.region === filter
+              )
+              .slice(0, 10)
+              .map((country, index) => {
+                return <Card key={index} country={country} />;
+              })}
         </ul>
       </main>
     </Layout>

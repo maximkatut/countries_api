@@ -1,9 +1,10 @@
 import create from "zustand";
+import { IData } from "../lib/countries";
 
 type State = {
-  countries: object[];
+  countries: IData[];
   isDark: boolean;
-  setCountries: (all: object[]) => void;
+  setCountries: (all: IData[]) => void;
   setIsDark: (isDark: boolean) => void;
 };
 

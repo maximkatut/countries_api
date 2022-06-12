@@ -1,14 +1,15 @@
 import Link from "next/link";
 import Image from "next/image";
+import { IData } from "../lib/countries";
 
-const Card = ({ country }) => {
+const Card = ({ country }: { country: IData }) => {
   return (
     <li className="w-[300px] md:w-[264px] bg-white dark:bg-dark-blue shadow-sm rounded-lg">
       <Link href={`countries/${country.cca3.toLowerCase()}`}>
         <div className="cursor-pointer">
           <Image
             className="rounded-t-md"
-            src={country.flags.png}
+            src={country.flags.svg}
             alt="flag"
             width={264}
             height={160}
