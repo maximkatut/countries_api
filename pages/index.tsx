@@ -10,7 +10,6 @@ import { getAllCountries, IData } from "../lib/countries";
 import Layout from "../components/layout";
 import SearchForm from "../components/searchForm";
 import Card from "../components/card";
-import { LocalStorage } from "../services/LocalStorage/LocalStorage.service";
 import DropDown from "../components/dropDown";
 
 // TODO add infinite scroll
@@ -18,16 +17,13 @@ import DropDown from "../components/dropDown";
 const Home: NextPage = () => {
   const countries = useStore((state) => state.countries);
   const setCountries = useStore((state) => state.setCountries);
-  const setIsDark = useStore((state) => state.setIsDark);
   const [filter, setFilter] = useState<string>("all");
 
   useEffect(() => {
-    setIsDark(LocalStorage.get("theme") === "dark");
-    LocalStorage.update();
     getAllCountries().then((data) => {
       setCountries(data);
     });
-  }, [setCountries, setIsDark]);
+  }, [setCountries]);
 
   return (
     <Layout home>

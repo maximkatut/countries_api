@@ -7,6 +7,11 @@ const DarkModeToggle = () => {
   const isDark = useStore((state) => state.isDark);
   const setIsDark = useStore((state) => state.setIsDark);
 
+  useEffect(() => {
+    setIsDark(LocalStorage.get("theme") === "dark");
+    LocalStorage.update();
+  }, [setIsDark]);
+
   const toggleDarkMode = () => {
     if (isDark) {
       LocalStorage.setDarkModeOff();

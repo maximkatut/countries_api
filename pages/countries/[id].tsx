@@ -109,7 +109,6 @@ const Country = ({
                 </span>
               )}
               {countryNames !== [] &&
-                countryNames &&
                 countryNames.map((item) => {
                   return (
                     <Link
