@@ -25,7 +25,7 @@ const Home: NextPage = () => {
     setIsDark(LocalStorage.get("theme") === "dark");
     LocalStorage.update();
     getAllCountries().then((data) => {
-      setCountries(data as IData[]);
+      setCountries(data);
     });
   }, [setCountries, setIsDark]);
 

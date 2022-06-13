@@ -22,19 +22,27 @@ const clientApi = axios.create({
   baseURL: BASE_URL,
 });
 
-export const getAllCountries = async () => {
-  let countries;
+export const getAllCountries = async (url?: string): Promise<IData[]> => {
+  let countries: IData[] = [];
+  let route = COUNTRIES_ROUTES.ALL;
+  if (url) {
+    route = url;
+  }
   await clientApi
-    .get(COUNTRIES_ROUTES.ALL)
+    .get(route)
     .then((res) => res.data)
     .then((data) => {
       countries = data;
     });
-  return countries as unknown | IData[];
+  return countries;
 };
 
-export const getAllCountryIds = async () => {
-  let paths;
+export const getAllCountryIds = async (): Promise<
+  {
+    params: { id: string };
+  }[]
+> => {
+  let paths: [] = [];
   await clientApi
     .get(COUNTRIES_ROUTES.CCA3)
     .then((res) => res.data)
@@ -46,13 +54,29 @@ export const getAllCountryIds = async () => {
   return paths;
 };
 
-export const getCountry = async (cca3: string) => {
-  let country;
+export const getCountry = async (cca3: string): Promise<IData> => {
+  let country: any;
   await clientApi
     .get(`${COUNTRIES_ROUTES.ALPHA}/${cca3}`)
     .then((res) => res.data)
     .then((data) => {
       country = data[0];
     });
-  return country as unknown | IData;
+  return country;
+};
+
+export const getCountryNameByCca3 = async (
+  countries: string[]
+): Promise<string[]> => {
+  let countryNames: string[] = [];
+  const makeReq = async (cca3: string) => {
+    await clientApi
+      .get(`${COUNTRIES_ROUTES.ALPHA}/${cca3}`)
+      .then((res) => res.data)
+      .then((data) => {
+        countryNames.push(data[0].name.common);
+      });
+  };
+  countries.forEach((cca3) => makeReq(cca3));
+  return countryNames;
 };
