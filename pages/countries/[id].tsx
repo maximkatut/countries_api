@@ -4,13 +4,13 @@ import Image from "next/image";
 import {
   getAllCountries,
   getAllCountryIds,
+  getCountryNamesByCca3,
   getCountry,
   IData,
 } from "../../lib/countries";
 import Layout from "../../components/layout";
 import { useStore } from "../../store";
 import { numberWithCommas } from "../../utils/helpers/numberWithCommas";
-import { useEffect, useState } from "react";
 import { COUNTRIES_ROUTES } from "../../utils/constants/countries.constants";
 
 const Country = ({
@@ -21,6 +21,10 @@ const Country = ({
   countryNames: { countryName: string; cca3: string }[];
 }) => {
   const isDark = useStore((state) => state.isDark);
+  const nativeNames = Object.values(countryData.name.nativeName) as {
+    common: string;
+  }[];
+  const nativeName = nativeNames[0].common;
 
   return (
     <Layout>
@@ -53,58 +57,56 @@ const Country = ({
             />
           </div>
           <div className="px-8 py-11 col-span-2 lg:col-span-1">
-            <table cellPadding={3} className={"border-separate"}>
-              <caption className="text-3xl font-extrabold mb-6 text-left">
-                {countryData.name.common}
-              </caption>
-              <tbody>
-                <tr>
-                  <td>
-                    <span className="font-extrabold">Native Name: </span>
-                    {/* {countryData.name.nativeName.nld.common} */}
-                  </td>
-                  <td className="">
-                    <span className="font-extrabold">Top Level Domain: </span>
-                    {countryData.tld.map((item) => item + " ")}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="font-extrabold">Population: </span>
-                    {numberWithCommas(countryData.population)}
-                  </td>
-                  <td className="">
-                    <span className="font-extrabold">Currencies: </span>
-                    {/* {countryData.currencies} */}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="font-extrabold">Region: </span>
-                    {countryData.region}
-                  </td>
-                  <td className="">
-                    <span className="font-extrabold">Languages: </span>
-                    {/* {countryData.languages} */}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="font-extrabold">Subregion: </span>
-                    {countryData.subregion}
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span className="font-extrabold">Capital: </span>
-                    {countryData.capital}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-            <p className="mt-16 flex flex-wrap">
+            <h2 className="text-3xl font-extrabold mb-6 text-left">
+              {countryData.name.common}
+            </h2>
+            <ul>
+              <li>
+                <span className="font-extrabold">Native Name: </span>
+                {nativeName}
+              </li>
+              <li>
+                <span className="font-extrabold">Population: </span>
+                {numberWithCommas(countryData.population)}
+              </li>
+              <li>
+                <span className="font-extrabold">Region: </span>
+                {countryData.region}
+              </li>
+              <li>
+                <span className="font-extrabold">Subregion: </span>
+                {countryData.subregion}
+              </li>
+              <li>
+                <span className="font-extrabold">Capital: </span>
+                {countryData.capital}
+              </li>
+            </ul>
+            <ul>
+              <li className="">
+                <span className="font-extrabold">Top Level Domain: </span>
+                {countryData.tld.map((item) => item + " ")}
+              </li>
+
+              <li className="">
+                <span className="font-extrabold">Currencies: </span>
+                {Object.values(countryData.currencies).map((item) => {
+                  return <>{item.name}</>;
+                })}
+              </li>
+
+              <li className="">
+                <span className="font-extrabold">Languages: </span>
+                {Object.values(countryData.languages).map((item) => {
+                  return <>{item} </>;
+                })}
+              </li>
+            </ul>
+            <div className="mt-16 flex flex-wrap">
               {countryNames !== [] && (
-                <span className="font-extrabold ">Border Countries:</span>
+                <span className="font-extrabold p-1 mb-2">
+                  Border Countries:
+                </span>
               )}
               {countryNames !== [] &&
                 countryNames &&
@@ -116,7 +118,7 @@ const Country = ({
                     >
                       <span
                         className={
-                          "ml-2 p-3 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"
+                          "ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"
                         }
                       >
                         {item.countryName}
@@ -124,7 +126,7 @@ const Country = ({
                     </Link>
                   );
                 })}
-            </p>
+            </div>
           </div>
         </section>
       </main>
@@ -143,22 +145,6 @@ export async function getStaticPaths() {
 export async function getStaticProps({ params }: any) {
   const countryData = await getCountry(params.id);
   const countries = await getAllCountries(COUNTRIES_ROUTES.NAME_CCA3);
-
-  const getCountryNamesByCca3 = (countries: IData[], { borders }: IData) => {
-    let countryNames: {}[] = [];
-    if (borders === undefined) return [];
-    countries.filter((country) => {
-      borders.forEach((borderCountry) => {
-        if (country.cca3 === borderCountry) {
-          countryNames.push({
-            countryName: country.name.common,
-            cca3: country.cca3,
-          });
-        }
-      });
-    });
-    return countryNames;
-  };
 
   const countryNames = getCountryNamesByCca3(countries, countryData);
 

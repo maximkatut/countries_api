@@ -5,7 +5,7 @@ import {
 } from "../utils/constants/countries.constants";
 
 export type IData = {
-  name: { common: string };
+  name: { common: string; nativeName: {} };
   cca3: string;
   capital: string[];
   flags: { svg: string };
@@ -65,18 +65,21 @@ export const getCountry = async (cca3: string): Promise<IData> => {
   return country;
 };
 
-export const getCountryNameByCca3 = async (
-  countries: string[]
-): Promise<string[]> => {
-  let countryNames: string[] = [];
-  const makeReq = async (cca3: string) => {
-    await clientApi
-      .get(`${COUNTRIES_ROUTES.ALPHA}/${cca3}`)
-      .then((res) => res.data)
-      .then((data) => {
-        countryNames.push(data[0].name.common);
-      });
-  };
-  countries.forEach((cca3) => makeReq(cca3));
+export const getCountryNamesByCca3 = (
+  countries: IData[],
+  { borders }: IData
+) => {
+  let countryNames: {}[] = [];
+  if (borders === undefined) return [];
+  countries.filter((country) => {
+    borders.forEach((borderCountry) => {
+      if (country.cca3 === borderCountry) {
+        countryNames.push({
+          countryName: country.name.common,
+          cca3: country.cca3,
+        });
+      }
+    });
+  });
   return countryNames;
 };
