@@ -3,7 +3,7 @@ import { useStore } from "../store";
 const SearchForm = () => {
   const isDark = useStore((state) => state.isDark);
   return (
-    <form>
+    <form className="mb-10">
       <label className="relative">
         <span className="absolute left-8 top-0">
           <Image

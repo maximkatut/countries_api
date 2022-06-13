@@ -56,24 +56,24 @@ const Country = ({
               alt="Flag"
             />
           </div>
-          <div className="px-8 py-11 col-span-2 lg:col-span-1">
-            <h2 className="text-3xl font-extrabold mb-6 text-left">
+          <div className="md:px-8 py-11 col-span-2 lg:col-span-1 grid grid-cols-2">
+            <h2 className="text-3xl font-extrabold mb-8 col-span-2">
               {countryData.name.common}
             </h2>
-            <ul>
-              <li>
+            <ul className="mb-6 md:mb-0  col-span-2 md:col-span-1">
+              <li className="mb-2">
                 <span className="font-extrabold">Native Name: </span>
                 {nativeName}
               </li>
-              <li>
+              <li className="mb-2">
                 <span className="font-extrabold">Population: </span>
                 {numberWithCommas(countryData.population)}
               </li>
-              <li>
+              <li className="mb-2">
                 <span className="font-extrabold">Region: </span>
                 {countryData.region}
               </li>
-              <li>
+              <li className="mb-2">
                 <span className="font-extrabold">Subregion: </span>
                 {countryData.subregion}
               </li>
@@ -82,13 +82,13 @@ const Country = ({
                 {countryData.capital}
               </li>
             </ul>
-            <ul>
-              <li className="">
+            <ul className="md:ml-16 col-span-2 md:col-span-1">
+              <li className="mb-2">
                 <span className="font-extrabold">Top Level Domain: </span>
                 {countryData.tld.map((item) => item + " ")}
               </li>
 
-              <li className="">
+              <li className="mb-2">
                 <span className="font-extrabold">Currencies: </span>
                 {Object.values(countryData.currencies).map((item) => {
                   return <>{item.name}</>;
@@ -102,13 +102,13 @@ const Country = ({
                 })}
               </li>
             </ul>
-            <div className="mt-16 flex flex-wrap">
-              {countryNames !== [] && (
+            <div className="mt-8 md:mt-16 flex flex-wrap col-span-2">
+              {countryNames[0] !== undefined && (
                 <span className="font-extrabold p-1 mb-2">
                   Border Countries:
                 </span>
               )}
-              {countryNames !== [] &&
+              {countryNames[0] !== undefined &&
                 countryNames.map((item) => {
                   return (
                     <Link

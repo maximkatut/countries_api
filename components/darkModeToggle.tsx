@@ -26,7 +26,7 @@ const DarkModeToggle = () => {
       onClick={toggleDarkMode}
       className="flex items-center text-base font-semibold"
     >
-      <span className="md:mr-2 flex">
+      <span className="mr-2 flex">
         <Image
           src={isDark ? "/images/dark.svg" : "/images/light.svg"}
           width={16}
@@ -34,7 +34,7 @@ const DarkModeToggle = () => {
           alt="Dark mode"
         />
       </span>
-      <span className="hidden md:inline">Dark Mode</span>
+      <span>Dark Mode</span>
     </button>
   );
 };

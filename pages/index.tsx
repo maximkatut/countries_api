@@ -61,11 +61,11 @@ const Home: NextPage = () => {
         pauseOnHover={false}
       />
       <main className="pb-20">
-        <div className="flex justify-between mb-12">
+        <div className="flex justify-between mb-12 flex-wrap">
           <SearchForm />
           <DropDown setFilter={setFilter} filter={filter} />
         </div>
-        <ul className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center gap-20">
+        <ul className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center md:gap-20">
           {countries &&
             countries
               .filter((item) =>
