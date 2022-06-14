@@ -1,9 +1,18 @@
 import Image from "next/image";
 import { useStore } from "../store";
-const SearchForm = () => {
+
+interface IProps {
+  setQuery: (query: string) => void;
+}
+
+const SearchForm = ({ setQuery }: IProps) => {
+  const handleOnChange = ({ target }: React.ChangeEvent<HTMLFormElement>) => {
+    setQuery(target.value);
+  };
+
   const isDark = useStore((state) => state.isDark);
   return (
-    <form className="mb-10">
+    <form className="mb-10" onChange={handleOnChange}>
       <label className="relative">
         <span className="absolute left-8 top-0">
           <Image
