@@ -1,30 +1,26 @@
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { ToastContainer } from "react-toastify";
-import type { NextPage } from "next";
+// import InfiniteScroll from "react-infinite-scroll-component";
 
 import "react-toastify/dist/ReactToastify.css";
 
-import { useStore } from "../store";
-import { getAllCountries } from "../lib/countries";
+import { getAllCountries, IData } from "../lib/countries";
 import Layout from "../components/layout";
 import SearchForm from "../components/searchForm";
 import Card from "../components/card";
 import DropDown from "../components/dropDown";
+import { COUNTRIES_ROUTES } from "../utils/constants/countries.constants";
 
 // TODO add infinite scroll
 
-const Home: NextPage = () => {
-  const countries = useStore((state) => state.countries);
-  const setCountries = useStore((state) => state.setCountries);
-  const [filter, setFilter] = useState<string>("all");
-  const [query, setQuery] = useState<string>("");
+type IProps = {
+  countries: IData[];
+};
 
-  useEffect(() => {
-    getAllCountries().then((data) => {
-      setCountries(data);
-    });
-  }, [setCountries]);
+const Home = ({ countries }: IProps) => {
+  const [filter, setFilter] = useState<string>("All");
+  const [query, setQuery] = useState<string>("");
 
   return (
     <Layout home>
@@ -73,3 +69,13 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export async function getStaticProps() {
+  const countries = await getAllCountries(COUNTRIES_ROUTES.ALL);
+
+  return {
+    props: {
+      countries,
+    },
+  };
+}
