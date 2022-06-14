@@ -5,11 +5,4 @@ export const COUNTRIES_ROUTES = {
   CCA3: "/all?fields=cca3",
   NAME_CCA3: "/all?fields=cca3,name",
 };
-export const COUNTRIES_REGIONS = [
-  "Asia",
-  "Americas",
-  "Africa",
-  "Oceania",
-  "Europe",
-  "Antarctic",
-];
+export const COUNTRIES_REGIONS = ["Asia", "Americas", "Africa", "Oceania", "Europe", "Antarctic"];

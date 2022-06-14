@@ -55,7 +55,7 @@ const Home: NextPage = () => {
         <ul className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center md:gap-20">
           {countries &&
             countries
-              .filter((item) => (filter === "all" ? item : item.region === filter))
+              .filter((item) => (filter === "All" ? item : item.region === filter))
               .filter((item) => {
                 if (query === "") {
                   return item;
