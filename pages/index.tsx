@@ -6,7 +6,7 @@ import type { NextPage } from "next";
 import "react-toastify/dist/ReactToastify.css";
 
 import { useStore } from "../store";
-import { getAllCountries, IData } from "../lib/countries";
+import { getAllCountries } from "../lib/countries";
 import Layout from "../components/layout";
 import SearchForm from "../components/searchForm";
 import Card from "../components/card";
@@ -30,23 +30,9 @@ const Home: NextPage = () => {
       <Head>
         <title>Countries</title>
         <meta name="description" content="Countries API" />
-        <link
-          rel="apple-touch-icon"
-          sizes="180x180"
-          href="/apple-touch-icon.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="32x32"
-          href="/favicon-32x32.png"
-        />
-        <link
-          rel="icon"
-          type="image/png"
-          sizes="16x16"
-          href="/favicon-16x16.png"
-        />
+        <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
         <link rel="manifest" href="/site.webmanifest" />
       </Head>
       <ToastContainer
@@ -68,9 +54,7 @@ const Home: NextPage = () => {
         <ul className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center md:gap-20">
           {countries &&
             countries
-              .filter((item) =>
-                filter === "all" ? item : item.region === filter
-              )
+              .filter((item) => (filter === "all" ? item : item.region === filter))
               .slice(0, 10)
               .map((country, index) => {
                 return <Card key={index} country={country} />;

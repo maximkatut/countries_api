@@ -1,11 +1,7 @@
 import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
-import {
-  getAllCountryIds,
-  getCountry,
-  countryAdapter,
-} from "../../lib/countries";
+import { getAllCountryIds, getCountry, countryAdapter } from "../../lib/countries";
 import Layout from "../../components/layout";
 import { useStore } from "../../store";
 
@@ -42,12 +38,7 @@ const Country = ({ country }: ICountry) => {
         <Link href={"/"}>
           <button className="w-32 px-5 py-2 bg-white dark:bg-dark-blue rounded-md shadow-lg flex mb-20">
             <span className="flex w-4 ml-2 mr-6">
-              <Image
-                src={isDark ? "/images/left-dark.svg" : "/images/left.svg"}
-                width={16}
-                height={16}
-                alt="Go back"
-              />
+              <Image src={isDark ? "/images/left-dark.svg" : "/images/left.svg"} width={16} height={16} alt="Go back" />
             </span>
             <span>Back</span>
           </button>
@@ -57,9 +48,7 @@ const Country = ({ country }: ICountry) => {
             <Image src={country.flag} width={560} height={400} alt="Flag" />
           </div>
           <div className="md:px-8 py-11 col-span-2 lg:col-span-1 grid grid-cols-2">
-            <h2 className="text-3xl font-extrabold mb-8 col-span-2">
-              {country.name}
-            </h2>
+            <h2 className="text-3xl font-extrabold mb-8 col-span-2">{country.name}</h2>
             <ul className="mb-6 md:mb-0  col-span-2 md:col-span-1">
               {country.leftSideInfo.map((item) => {
                 return (
@@ -84,11 +73,7 @@ const Country = ({ country }: ICountry) => {
               <span className="font-extrabold p-1 mb-2">Border Countries:</span>
               {country.countryBorderNames.map((item, index) => (
                 <Link key={index} href={`/countries/${item.cca3}`}>
-                  <span
-                    className={
-                      "ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"
-                    }
-                  >
+                  <span className={"ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"}>
                     {item.countryName}
                   </span>
                 </Link>

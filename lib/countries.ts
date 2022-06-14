@@ -1,8 +1,5 @@
 import axios from "axios";
-import {
-  BASE_URL,
-  COUNTRIES_ROUTES,
-} from "../utils/constants/countries.constants";
+import { BASE_URL, COUNTRIES_ROUTES } from "../utils/constants/countries.constants";
 import { numberWithCommas } from "../utils/helpers/numberWithCommas";
 
 export type IData = {
@@ -66,10 +63,7 @@ export const getCountry = async (cca3: string): Promise<IData> => {
   return country;
 };
 
-export const getCountryNamesByCca3 = (
-  countries: IData[],
-  { borders }: IData
-) => {
+export const getCountryNamesByCca3 = (countries: IData[], { borders }: IData) => {
   let countryNames: {}[] = [];
   if (borders === undefined) return [];
   countries.filter((country) => {
@@ -86,25 +80,31 @@ export const getCountryNamesByCca3 = (
 };
 
 export const countryAdapter = async (country: IData) => {
-  const nativeNames = Object.values(country.name.nativeName) as {
-    common: string;
-  }[];
-  const nativeName = nativeNames[0].common;
-  const name = country.name.common;
-  const flag = country.flags.svg;
-  const population = numberWithCommas(country.population);
-  const currencies = Object.values(country.currencies);
-  const languages = Object.values(country.languages);
+  const nativeNames = country.name.nativeName
+    ? (Object.values(country.name.nativeName) as {
+        common: string;
+      }[])
+    : [];
+
+  const nativeName = nativeNames[0]?.common || "";
+  const name = country.name.common || "";
+  const flag = country.flags.svg || "";
+  const population = numberWithCommas(country.population) || "";
+  const currencies = country.currencies ? Object.values(country.currencies) : [];
+  const languages = country.languages ? Object.values(country.languages) : [];
   const leftSideInfo = [
     { title: "Native Name", value: nativeName },
     { title: "Population", value: population },
-    { title: "Region", value: country.region },
-    { title: "Subregion", value: country.subregion },
-    { title: "Capital", value: country.capital },
+    { title: "Region", value: country.region || "" },
+    { title: "Subregion", value: country.subregion || "" },
+    { title: "Capital", value: country.capital || "" },
   ];
   const rightSideInfo = [
-    { title: "Top Level Domain", value: country.tld },
-    { title: "Currencies", value: currencies.map((item) => item.name) },
+    { title: "Top Level Domain", value: country.tld || [] },
+    {
+      title: "Currencies",
+      value: currencies.map((item) => item.name || ""),
+    },
     { title: "Languages", value: languages },
   ];
 
