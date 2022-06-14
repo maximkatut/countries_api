@@ -70,7 +70,9 @@ const Country = ({ country }: ICountry) => {
               })}
             </ul>
             <div className="mt-8 md:mt-16 flex flex-wrap col-span-2">
-              <span className="font-extrabold p-1 mb-2">Border Countries:</span>
+              {country.countryBorderNames.length !== 0 && (
+                <span className="font-extrabold p-1 mb-2">Border Countries:</span>
+              )}
               {country.countryBorderNames.map((item, index) => (
                 <Link key={index} href={`/countries/${item.cca3}`}>
                   <span className={"ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"}>
