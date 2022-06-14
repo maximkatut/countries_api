@@ -2,34 +2,39 @@ import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import {
-  getAllCountries,
   getAllCountryIds,
-  getCountryNamesByCca3,
   getCountry,
-  IData,
+  countryAdapter,
 } from "../../lib/countries";
 import Layout from "../../components/layout";
 import { useStore } from "../../store";
-import { numberWithCommas } from "../../utils/helpers/numberWithCommas";
-import { COUNTRIES_ROUTES } from "../../utils/constants/countries.constants";
 
-const Country = ({
-  countryData,
-  countryNames,
-}: {
-  countryData: IData;
-  countryNames: { countryName: string; cca3: string }[];
-}) => {
+type ICountry = {
+  country: {
+    name: string;
+    flag: string;
+    leftSideInfo: {
+      title: string;
+      value: any;
+    }[];
+    rightSideInfo: {
+      title: string;
+      value: any[];
+    }[];
+    countryBorderNames: {
+      countryName: string;
+      cca3: string;
+    }[];
+  };
+};
+
+const Country = ({ country }: ICountry) => {
   const isDark = useStore((state) => state.isDark);
-  const nativeNames = Object.values(countryData.name.nativeName) as {
-    common: string;
-  }[];
-  const nativeName = nativeNames[0].common;
 
   return (
     <Layout>
       <Head>
-        <title>Countries - {countryData.name.common}</title>
+        <title>Countries - {country.name}</title>
         <meta name="description" content="Countries API" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -49,82 +54,45 @@ const Country = ({
         </Link>
         <section className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-2">
           <div>
-            <Image
-              src={countryData.flags.svg}
-              width={560}
-              height={400}
-              alt="Flag"
-            />
+            <Image src={country.flag} width={560} height={400} alt="Flag" />
           </div>
           <div className="md:px-8 py-11 col-span-2 lg:col-span-1 grid grid-cols-2">
             <h2 className="text-3xl font-extrabold mb-8 col-span-2">
-              {countryData.name.common}
+              {country.name}
             </h2>
             <ul className="mb-6 md:mb-0  col-span-2 md:col-span-1">
-              <li className="mb-2">
-                <span className="font-extrabold">Native Name: </span>
-                {nativeName}
-              </li>
-              <li className="mb-2">
-                <span className="font-extrabold">Population: </span>
-                {numberWithCommas(countryData.population)}
-              </li>
-              <li className="mb-2">
-                <span className="font-extrabold">Region: </span>
-                {countryData.region}
-              </li>
-              <li className="mb-2">
-                <span className="font-extrabold">Subregion: </span>
-                {countryData.subregion}
-              </li>
-              <li>
-                <span className="font-extrabold">Capital: </span>
-                {countryData.capital}
-              </li>
+              {country.leftSideInfo.map((item) => {
+                return (
+                  <li className="mb-2" key={item.title}>
+                    <span className="font-extrabold">{item.title}: </span>
+                    {item.value}
+                  </li>
+                );
+              })}
             </ul>
             <ul className="md:ml-16 col-span-2 md:col-span-1">
-              <li className="mb-2">
-                <span className="font-extrabold">Top Level Domain: </span>
-                {countryData.tld.map((item) => item + " ")}
-              </li>
-
-              <li className="mb-2">
-                <span className="font-extrabold">Currencies: </span>
-                {Object.values(countryData.currencies).map((item) => {
-                  return <>{item.name}</>;
-                })}
-              </li>
-
-              <li className="">
-                <span className="font-extrabold">Languages: </span>
-                {Object.values(countryData.languages).map((item) => {
-                  return <>{item} </>;
-                })}
-              </li>
+              {country.rightSideInfo.map((item) => {
+                return (
+                  <li className="mb-2" key={item.title}>
+                    <span className="font-extrabold">{item.title}: </span>
+                    {item.value.map((item) => item + " ")}
+                  </li>
+                );
+              })}
             </ul>
             <div className="mt-8 md:mt-16 flex flex-wrap col-span-2">
-              {countryNames[0] !== undefined && (
-                <span className="font-extrabold p-1 mb-2">
-                  Border Countries:
-                </span>
-              )}
-              {countryNames[0] !== undefined &&
-                countryNames.map((item) => {
-                  return (
-                    <Link
-                      key={item.cca3}
-                      href={`/countries/${item.cca3.toLowerCase()}`}
-                    >
-                      <span
-                        className={
-                          "ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"
-                        }
-                      >
-                        {item.countryName}
-                      </span>
-                    </Link>
-                  );
-                })}
+              <span className="font-extrabold p-1 mb-2">Border Countries:</span>
+              {country.countryBorderNames.map((item, index) => (
+                <Link key={index} href={`/countries/${item.cca3}`}>
+                  <span
+                    className={
+                      "ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"
+                    }
+                  >
+                    {item.countryName}
+                  </span>
+                </Link>
+              ))}
             </div>
           </div>
         </section>
@@ -143,14 +111,11 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }: any) {
   const countryData = await getCountry(params.id);
-  const countries = await getAllCountries(COUNTRIES_ROUTES.NAME_CCA3);
-
-  const countryNames = getCountryNamesByCca3(countries, countryData);
+  const country = await countryAdapter(countryData);
 
   return {
     props: {
-      countryData,
-      countryNames,
+      country,
     },
   };
 }

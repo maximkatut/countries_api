@@ -3,6 +3,7 @@ import {
   BASE_URL,
   COUNTRIES_ROUTES,
 } from "../utils/constants/countries.constants";
+import { numberWithCommas } from "../utils/helpers/numberWithCommas";
 
 export type IData = {
   name: { common: string; nativeName: {} };
@@ -76,10 +77,45 @@ export const getCountryNamesByCca3 = (
       if (country.cca3 === borderCountry) {
         countryNames.push({
           countryName: country.name.common,
-          cca3: country.cca3,
+          cca3: country.cca3.toLowerCase(),
         });
       }
     });
   });
   return countryNames;
+};
+
+export const countryAdapter = async (country: IData) => {
+  const nativeNames = Object.values(country.name.nativeName) as {
+    common: string;
+  }[];
+  const nativeName = nativeNames[0].common;
+  const name = country.name.common;
+  const flag = country.flags.svg;
+  const population = numberWithCommas(country.population);
+  const currencies = Object.values(country.currencies);
+  const languages = Object.values(country.languages);
+  const leftSideInfo = [
+    { title: "Native Name", value: nativeName },
+    { title: "Population", value: population },
+    { title: "Region", value: country.region },
+    { title: "Subregion", value: country.subregion },
+    { title: "Capital", value: country.capital },
+  ];
+  const rightSideInfo = [
+    { title: "Top Level Domain", value: country.tld },
+    { title: "Currencies", value: currencies.map((item) => item.name) },
+    { title: "Languages", value: languages },
+  ];
+
+  const countries = await getAllCountries(COUNTRIES_ROUTES.NAME_CCA3);
+  const countryBorderNames = getCountryNamesByCca3(countries, country);
+
+  return {
+    name,
+    flag,
+    leftSideInfo,
+    rightSideInfo,
+    countryBorderNames,
+  };
 };
