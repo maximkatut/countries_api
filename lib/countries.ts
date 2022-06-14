@@ -1,6 +1,7 @@
 import axios from "axios";
 import { BASE_URL, COUNTRIES_ROUTES } from "../utils/constants/countries.constants";
 import { numberWithCommas } from "../utils/helpers/numberWithCommas";
+import { toast } from "react-toastify";
 
 export type IData = {
   name: { common: string; nativeName: {} };
@@ -19,6 +20,14 @@ export type IData = {
 const clientApi = axios.create({
   baseURL: BASE_URL,
 });
+
+clientApi.interceptors.request.use(
+  (config) => config,
+  (error) => {
+    let message = typeof error.response !== "undefined" ? error.response.data.message : error.message;
+    toast(message);
+  }
+);
 
 export const getAllCountries = async (url?: string): Promise<IData[]> => {
   let countries: IData[] = [];
