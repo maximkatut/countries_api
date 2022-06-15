@@ -1,7 +1,7 @@
 import InfiniteScroll from "react-infinite-scroll-component";
 import { IData } from "../lib/countries";
 import Card from "../components/card";
-import { useEffect, useState } from "react";
+import { useLayoutEffect, useRef, useState } from "react";
 
 interface IProps {
   filteredCountries: IData[];
@@ -12,9 +12,13 @@ const countriesPerPage = 20;
 const InfiniteCards = ({ filteredCountries }: IProps) => {
   const [showedCountries, setShowedCountries] = useState<IData[]>(filteredCountries.slice(0, countriesPerPage));
   const [next, setNext] = useState<number>(countriesPerPage);
-  console.log(filteredCountries, "filtere");
+  const firstUpdate = useRef<boolean>(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
     setShowedCountries(filteredCountries.slice(0, next + countriesPerPage));
   }, [filteredCountries, next]);
 
@@ -22,7 +26,6 @@ const InfiniteCards = ({ filteredCountries }: IProps) => {
     const slicedCountries = filteredCountries.slice(start, end);
     const newShowedCountries = [...showedCountries, ...slicedCountries];
     setShowedCountries(newShowedCountries);
-    console.log(newShowedCountries, "newshowed");
   };
 
   const loadMore = () => {
@@ -40,6 +43,7 @@ const InfiniteCards = ({ filteredCountries }: IProps) => {
       className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 
       justify-items-center md:gap-20"
     >
+      {showedCountries.length === 0 && <p className="p-20 bg-white dark:bg-dark-blue">No results...</p>}
       {showedCountries.map((country, index) => {
         return <Card key={index} country={country} />;
       })}
