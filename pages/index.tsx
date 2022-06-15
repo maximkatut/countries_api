@@ -1,18 +1,15 @@
 import Head from "next/head";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ToastContainer } from "react-toastify";
-// import InfiniteScroll from "react-infinite-scroll-component";
 
 import "react-toastify/dist/ReactToastify.css";
 
 import { getAllCountries, IData } from "../lib/countries";
 import Layout from "../components/layout";
 import SearchForm from "../components/searchForm";
-import Card from "../components/card";
 import DropDown from "../components/dropDown";
 import { COUNTRIES_ROUTES } from "../utils/constants/countries.constants";
-
-// TODO add infinite scroll
+import InfiniteCards from "../components/infiniteCards";
 
 type IProps = {
   countries: IData[];
@@ -21,6 +18,26 @@ type IProps = {
 const Home = ({ countries }: IProps) => {
   const [filter, setFilter] = useState<string>("All");
   const [query, setQuery] = useState<string>("");
+  const [filteredCountries, setFilteredCountries] = useState<IData[]>(countries);
+
+  const filterCountries = useCallback(
+    (countries: IData[]) => {
+      const filteredCountries = countries
+        .filter((item) => (filter === "All" ? item : item.region === filter))
+        .filter((item) => {
+          if (query === "") {
+            return item;
+          }
+          return item.name.common.toLowerCase().includes(query) ? true : false;
+        });
+      setFilteredCountries(filteredCountries);
+    },
+    [query, filter]
+  );
+
+  useEffect(() => {
+    filterCountries(countries);
+  }, [countries, filterCountries, query, filter]);
 
   return (
     <Layout home>
@@ -45,23 +62,11 @@ const Home = ({ countries }: IProps) => {
       />
       <main className="pb-20">
         <div className="flex justify-between mb-12 flex-wrap">
-          <SearchForm setQuery={setQuery} />
+          <SearchForm setQuery={setQuery} query={query} />
           <DropDown setFilter={setFilter} filter={filter} />
         </div>
-        <ul className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-items-center md:gap-20">
-          {countries &&
-            countries
-              .filter((item) => (filter === "All" ? item : item.region === filter))
-              .filter((item) => {
-                if (query === "") {
-                  return item;
-                }
-                return item.name.common.toLowerCase().includes(query) ? true : false;
-              })
-              .slice(0, 10)
-              .map((country, index) => {
-                return <Card key={index} country={country} />;
-              })}
+        <ul>
+          <InfiniteCards {...{ filteredCountries }} />
         </ul>
       </main>
     </Layout>
