@@ -65,9 +65,7 @@ const Home = ({ countries }: IProps) => {
           <SearchForm setQuery={setQuery} query={query} />
           <DropDown setFilter={setFilter} filter={filter} />
         </div>
-        <ul>
-          <InfiniteCards {...{ filteredCountries }} />
-        </ul>
+        <InfiniteCards {...{ filteredCountries }} />
       </main>
     </Layout>
   );

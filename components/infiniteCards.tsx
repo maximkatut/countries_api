@@ -39,14 +39,17 @@ const InfiniteCards = ({ filteredCountries }: IProps) => {
       next={loadMore}
       hasMore={filteredCountries.length > showedCountries.length}
       loader={<div className="p-10">Loading...</div>}
-      style={{ overflow: "none" }}
-      className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 
-      justify-items-center md:gap-20"
+      style={{ overflow: "visible" }}
     >
-      {showedCountries.length === 0 && <p className="p-20 bg-white dark:bg-dark-blue">No results...</p>}
-      {showedCountries.map((country, index) => {
-        return <Card key={index} country={country} />;
-      })}
+      <ul
+        className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 
+      justify-items-center md:gap-20"
+      >
+        {showedCountries.length === 0 && <li className="p-20 bg-white dark:bg-dark-blue">No results...</li>}
+        {showedCountries.map((country, index) => {
+          return <Card key={index} country={country} />;
+        })}
+      </ul>
     </InfiniteScroll>
   );
 };
