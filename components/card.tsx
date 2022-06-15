@@ -5,7 +5,7 @@ import { numberWithCommas } from "../utils/helpers/numberWithCommas";
 
 const Card = ({ country }: { country: IData }) => {
   return (
-    <li className="w-[330px] md:w-[264px] bg-white dark:bg-dark-blue shadow-sm rounded-lg mb-10 md:mb-0">
+    <li className="hover:shadow-xl hover:scale-105 active:scale-100 transition w-[330px] md:w-[264px] bg-white dark:bg-dark-blue shadow-sm rounded-lg mb-10 md:mb-0">
       <Link href={`countries/${country.cca3.toLowerCase()}`}>
         <div className="cursor-pointer">
           <Image className="rounded-t-md" src={country.flags.svg} alt="flag" width={330} height={200}></Image>

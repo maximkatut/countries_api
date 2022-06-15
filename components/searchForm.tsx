@@ -23,7 +23,7 @@ const SearchForm = ({ setQuery, query }: IProps) => {
   };
 
   return (
-    <form className="mb-10" onChange={handleChangeEvent}>
+    <form className="mb-10 md:mb-0" onChange={handleChangeEvent}>
       <label className="relative">
         <span className="absolute left-8 top-0">
           <Image

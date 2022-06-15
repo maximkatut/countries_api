@@ -36,7 +36,7 @@ const Country = ({ country }: ICountry) => {
       </Head>
       <main className="py-9">
         <Link href={"/"}>
-          <button className="w-32 px-5 py-2 bg-white dark:bg-dark-blue rounded-md shadow-lg flex mb-20">
+          <button className="w-32 px-5 py-2 bg-white dark:bg-dark-blue rounded-md shadow-lg flex mb-20 hover:shadow-xl hover:scale-105 transition active:scale-100">
             <span className="flex w-4 ml-2 mr-6">
               <Image src={isDark ? "/images/left-dark.svg" : "/images/left.svg"} width={16} height={16} alt="Go back" />
             </span>
@@ -75,7 +75,11 @@ const Country = ({ country }: ICountry) => {
               )}
               {country.countryBorderNames.map((item, index) => (
                 <Link key={index} href={`/countries/${item.cca3}`}>
-                  <span className={"ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"}>
+                  <span
+                    className={
+                      "hover:shadow-xl hover:scale-105 transition ml-2 p-1 mb-2 bg-white dark:bg-dark-blue shadow-md rounded-md cursor-pointer"
+                    }
+                  >
                     {item.countryName}
                   </span>
                 </Link>
